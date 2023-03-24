@@ -21,19 +21,26 @@ const setTodo = asyncHandler(async (req, res) => {
   });
   res.status(200).json(todo);
 });
-
 const updateTodo = asyncHandler(async (req, res) => {
-  const todo = await Todo.findById(req.params.id);
-  if (!todo) {
-    res.status(400);
-    throw new Error("not found");
-  }
-  const updateTodo = await Todo.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-  });
+  const { id } = req.params;
+  const { text, description, date } = req.body;
 
-  res.status(200).json(updateTodo);
+  const todo = await Todo.findById(id);
+
+  if (!todo) {
+    res.status(404);
+    throw new Error("Todo not found");
+  }
+
+  todo.text = text || todo.text;
+  todo.description = description || todo.description;
+  todo.date = date || todo.date;
+
+  const updatedTodo = await todo.save();
+
+  res.status(200).json(updatedTodo);
 });
+
 const deleteTodo = asyncHandler(async (req, res) => {
   const todo = await Todo.findById(req.params.id);
   if (!todo) {
