@@ -12,6 +12,7 @@ app.use(
   })
 );
 app.use("/api/todos", require("./routes/todoRoutes"));
+app.use("/api/users", require("./routes/userRoutes"));
 
 app.use(errorHandler);
 
