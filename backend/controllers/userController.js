@@ -28,10 +28,19 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error("Invalid user data");
   }
 });
-const loginUser = asyncHandler(async (rea, res) => {
-  res.status(200).json({ message: "login user" });
+const loginUser = asyncHandler(async (req, res) => {
+  const {email} = req.body;
+  const user = await User.findOne({ email });
+  if (user) {
+    res.status(200).json({
+      email: user.email,
+    });
+  } else {
+    res.status(400);
+    throw new Error("not found");
+  }
 });
-const getUser = asyncHandler(async (rea, res) => {
+const getUser = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "get user" });
 });
 module.exports = {
