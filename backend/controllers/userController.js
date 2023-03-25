@@ -37,6 +37,7 @@ const loginUser = asyncHandler(async (req, res) => {
   if (user) {
     res.status(200).json({
       email: user.email,
+      _id: user.id,
       token: generateToken(user._id),
     });
   } else {
@@ -55,7 +56,6 @@ const getUser = asyncHandler(async (req, res) => {
     email,
   });
 });
-
 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
