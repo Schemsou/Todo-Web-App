@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const asyncHandler = require("express-async-handler");
 const { json } = require("express");
 const User = require("../models/userModel");
+const { use } = require("react");
 
 const registerUser = asyncHandler(async (req, res) => {
   const { email } = req.body;
@@ -19,6 +20,8 @@ const registerUser = asyncHandler(async (req, res) => {
   });
 
   if (user) {
+    user.token = generateToken(user._id);
+    await user.save();
     res.status(201).json({
       _id: user.id,
       email,
@@ -29,11 +32,12 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 });
 const loginUser = asyncHandler(async (req, res) => {
-  const {email} = req.body;
+  const { email } = req.body;
   const user = await User.findOne({ email });
   if (user) {
     res.status(200).json({
       email: user.email,
+      token: generateToken(user._id),
     });
   } else {
     res.status(400);
@@ -41,8 +45,23 @@ const loginUser = asyncHandler(async (req, res) => {
   }
 });
 const getUser = asyncHandler(async (req, res) => {
-  res.status(200).json({ message: "get user" });
+  if (!req.user) {
+    res.status(400);
+    throw new Error("User not authorized");
+  }
+  const { email } = await User.findById(req.user.id);
+  res.status(200).json({
+    _id: req.user.id,
+    email,
+  });
 });
+
+
+const generateToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: "30d",
+  });
+};
 module.exports = {
   registerUser,
   loginUser,
