@@ -4,9 +4,15 @@ const sendGridAPIKey =
 
 sgMail.setApiKey(sendGridAPIKey);
 
-sgMail.send({
-  to: "chamsounounou7@gmail.com",
-  from: "chamsounounou7@gmail.com",
-  subject: "test email sending",
-  text: "test",
-});
+const sendWelcomeEmail = (email) => {
+  sgMail.send({
+    to: "chamsounounou7@gmail.com",
+    from: "chamsounounou7@gmail.com",
+    subject: "WELCOME",
+    text: "Welcome to your todo app",
+  });
+};
+
+module.exports = {
+  sendWelcomeEmail,
+};
