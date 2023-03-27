@@ -6,9 +6,19 @@ const User = require("../models/userModel");
 // @route GET api/todos
 // @acces private after auth
 const getTodo = asyncHandler(async (req, res) => {
-  const todos = await Todo.find({ user: req.user.id });
-  res.status(200).json(todos);
+  const { order } = req.body;
+  const { sort } = req.body;
+  const sortOrder = order === "desc" ? -1 : 1;
+  const todos = await Todo.find({ user: req.user.id }).sort({
+    text: sortOrder,
+  });
+  const sortedTodos = todos.sort((a, b) => {
+    if (a.text.toLowerCase() < b.text.toLowerCase()) return -sortOrder;
+    if (a.text.toLowerCase() > b.text.toLowerCase()) return sortOrder;
+  });
+  res.status(200).json(sortedTodos);
 });
+
 
 const setTodo = asyncHandler(async (req, res) => {
   if (!req.body.text) {
