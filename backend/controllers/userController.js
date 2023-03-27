@@ -3,6 +3,7 @@ const asyncHandler = require("express-async-handler");
 const { json } = require("express");
 const User = require("../models/userModel");
 const { use } = require("react");
+const {sendWelcomeEmail} = require("../emails/account")
 
 const registerUser = asyncHandler(async (req, res) => {
   const { email } = req.body;
@@ -12,7 +13,7 @@ const registerUser = asyncHandler(async (req, res) => {
   }
   const userExists = await User.findOne({ email });
   if (userExists) {
-    json.status(400);
+    res.status(400);
     throw new Error("user already exists");
   }
   const user = await User.create({
@@ -22,6 +23,7 @@ const registerUser = asyncHandler(async (req, res) => {
   if (user) {
     user.token = generateToken(user._id);
     await user.save();
+    sendWelcomeEmail(user.email)
     res.status(201).json({
       _id: user.id,
       email,
