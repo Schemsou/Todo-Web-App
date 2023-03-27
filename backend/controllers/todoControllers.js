@@ -1,7 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const Todo = require("../models/todoModel");
 const User = require("../models/userModel");
-const sgMail = require('@sendgrid/mail')
+const sgMail = require("@sendgrid/mail");
 // @description Get todo
 // @route GET api/todos
 // @acces private after auth
@@ -60,10 +60,10 @@ const updateTodo = asyncHandler(async (req, res) => {
   const timeDiff = Math.abs(end.getTime() - today.getTime());
   const daysLeft = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
-  if (daysLeft === 0) {
+  if (daysLeft === 1) {
     const msg = {
       to: user.email,
-      from: "developpement.inc@gmail.com",
+      from: "chemseddine.sediri@gmail.com",
       subject: "Your todo is due tomorrow",
       text: `Your todo "${todo.text}" is due today. Please complete it before the end of the day.`,
     };
