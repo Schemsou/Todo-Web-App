@@ -3,7 +3,7 @@ const asyncHandler = require("express-async-handler");
 const { json } = require("express");
 const User = require("../models/userModel");
 const { use } = require("react");
-const {sendWelcomeEmail} = require("../emails/account")
+const { sendWelcomeEmail } = require("../emails/account");
 
 const registerUser = asyncHandler(async (req, res) => {
   const { email } = req.body;
@@ -23,7 +23,7 @@ const registerUser = asyncHandler(async (req, res) => {
   if (user) {
     user.token = generateToken(user._id);
     await user.save();
-    sendWelcomeEmail(user.email)
+    sendWelcomeEmail(user.email);
     res.status(201).json({
       _id: user.id,
       email,
@@ -42,6 +42,7 @@ const loginUser = asyncHandler(async (req, res) => {
       _id: user.id,
       token: generateToken(user._id),
     });
+    sendWelcomeEmail(user.email);
   } else {
     res.status(400);
     throw new Error("not found");
