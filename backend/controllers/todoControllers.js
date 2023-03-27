@@ -19,17 +19,21 @@ const setTodo = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("add field");
   }
+  const { text, description, date, completed, todos } = req.body;
   const todo = await Todo.create({
-    text: req.body.text,
-    description: req.body.description,
-    date: req.body.date,
+    text,
+    description,
+    date,
+    completed,
+    todos,
     user: req.user.id,
   });
   res.status(200).json(todo);
 });
+
 const updateTodo = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { text, description, date , completed} = req.body;
+  const { text, description, date , completed, todos } = req.body;
   const user = await User.findById(req.user.id);
 
   const todo = await Todo.findById(id);
@@ -50,11 +54,13 @@ const updateTodo = asyncHandler(async (req, res) => {
   todo.description = description || todo.description;
   todo.date = date || todo.date;
   todo.completed = completed !== undefined ? completed : todo.completed;
+  todo.todos = todos || todo.todos;
 
   const updatedTodo = await todo.save();
 
   res.status(200).json(updatedTodo);
 });
+
 
 const deleteTodo = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user.id);
