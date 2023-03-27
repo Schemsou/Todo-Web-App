@@ -1,7 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const Todo = require("../models/todoModel");
 const User = require("../models/userModel");
-
+const sgMail = require('@sendgrid/mail')
 // @description Get todo
 // @route GET api/todos
 // @acces private after auth
@@ -33,7 +33,7 @@ const setTodo = asyncHandler(async (req, res) => {
 
 const updateTodo = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { text, description, date , completed, todos } = req.body;
+  const { text, description, date, completed, todos } = req.body;
   const user = await User.findById(req.user.id);
 
   const todo = await Todo.findById(id);
@@ -55,12 +55,25 @@ const updateTodo = asyncHandler(async (req, res) => {
   todo.date = date || todo.date;
   todo.completed = completed !== undefined ? completed : todo.completed;
   todo.todos = todos || todo.todos;
+  const today = new Date();
+  const end = new Date(todo.date);
+  const timeDiff = Math.abs(end.getTime() - today.getTime());
+  const daysLeft = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+  if (daysLeft === 0) {
+    const msg = {
+      to: user.email,
+      from: "developpement.inc@gmail.com",
+      subject: "Your todo is due tomorrow",
+      text: `Your todo "${todo.text}" is due today. Please complete it before the end of the day.`,
+    };
+    sgMail.send(msg);
+  }
 
   const updatedTodo = await todo.save();
 
   res.status(200).json(updatedTodo);
 });
-
 
 const deleteTodo = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user.id);
