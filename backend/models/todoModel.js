@@ -23,6 +23,10 @@ const todoSchema = mongoose.Schema(
         message: "End date must be in the future",
       },
     },
+    completed: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

@@ -8,10 +8,11 @@ const User = require("../models/userModel");
 const getTodo = asyncHandler(async (req, res) => {
   const { order } = req.body;
   const sortOrder = order === "desc" ? -1 : 1;
-  const todos = await Todo.find({ user: req.user.id }).sort({ text: sortOrder });
+  const todos = await Todo.find({ user: req.user.id }).sort({
+    text: sortOrder,
+  });
   res.status(200).json(todos);
 });
-
 
 const setTodo = asyncHandler(async (req, res) => {
   if (!req.body.text) {
@@ -28,7 +29,7 @@ const setTodo = asyncHandler(async (req, res) => {
 });
 const updateTodo = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { text, description, date } = req.body;
+  const { text, description, date , completed} = req.body;
   const user = await User.findById(req.user.id);
 
   const todo = await Todo.findById(id);
@@ -48,6 +49,7 @@ const updateTodo = asyncHandler(async (req, res) => {
   todo.text = text || todo.text;
   todo.description = description || todo.description;
   todo.date = date || todo.date;
+  todo.completed = completed !== undefined ? completed : todo.completed;
 
   const updatedTodo = await todo.save();
 
