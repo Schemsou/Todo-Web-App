@@ -4,13 +4,13 @@ This repository contains the code for a REST API backend developed using Node.js
 ## Getting Started
 To get started with this project, follow these steps:
 
-Clone this repository to your local machine using the following command:
-git clone https://github.com/Schemsou/Todo-Web-App.git  
-Install the dependencies by running the following command:
+Clone this repository to your local machine using the following command:  
+git clone https://github.com/Schemsou/Todo-Web-App.git    
+Install the dependencies by running the following command:  
 npm install  
-Start the server using the following command:
-npm run server
-This will start the server at http://localhost:8000
+Start the server using the following command:  
+npm run server. 
+This will start the server at   http://localhost:8000
 
 ## Documentation
 For more information on how to use the endpoints, please refer to the API documentation at:
@@ -18,9 +18,9 @@ For more information on how to use the endpoints, please refer to the API docume
 https://documenter.getpostman.com/view/26522800/2s93RQTELN
 
 ## Technologies
-Node.js
-Express
-MongoDB
+Node.js  
+Express  
+MongoDB  
 ## Future Development
 In the future, Next.js will be used to develop the frontend of this application.
 ## Conclusion
