@@ -8,9 +8,9 @@ Clone this repository to your local machine using the following command:
 git clone https://github.com/Schemsou/Todo-Web-App.git    
 Install the dependencies by running the following command:  
 npm install  
-Start the server using the following command:  
-npm run server. 
-This will start the server at   http://localhost:8000
+Start the server using the following command:    
+npm run server  
+This will start the server at     http://localhost:8000
 
 ## Documentation
 For more information on how to use the endpoints, please refer to the API documentation at:
